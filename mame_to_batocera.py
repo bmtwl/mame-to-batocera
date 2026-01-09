@@ -87,10 +87,15 @@ class MameToBatocera:
                 if not rom_name:
                     continue
 
-                # Skip BIOS and mechanical if they have appropriate attributes
+                # Check for BIOS, device, mechanical, and runnable attributes
                 is_bios = game_elem.get('isbios') == 'yes'
                 is_mechanical = game_elem.get('ismechanical') == 'yes'
                 is_device = game_elem.get('isdevice') == 'yes'
+                runnable = game_elem.get('runnable', 'yes')
+                is_not_runnable = runnable == 'no'
+
+                # Determine if game should be hidden
+                should_hide = is_bios or is_mechanical or is_device or is_not_runnable
 
                 # Extract basic metadata
                 game_data = {
@@ -101,6 +106,8 @@ class MameToBatocera:
                     'isbios': is_bios,
                     'ismechanical': is_mechanical,
                     'isdevice': is_device,
+                    'is_not_runnable': is_not_runnable,
+                    'hidden': should_hide,
                 }
 
                 # Extract input/players info if available
@@ -355,8 +362,12 @@ class MameToBatocera:
         elif 'players' in mame_data:
             players_elem.text = mame_data['players']
 
-        # Hidden flag for non-working games
-        if mame_data.get('driver_status') in ['preliminary', 'imperfect']:
+        # Hidden flag for BIOS, device, mechanical, non-runnable, or non-working games
+        should_hide = (
+            mame_data.get('hidden', False) or 
+            mame_data.get('driver_status') in ['preliminary', 'imperfect']
+        )
+        if should_hide:
             hidden_elem = ET.SubElement(game_elem, 'hidden')
             hidden_elem.text = 'true'
 
@@ -385,6 +396,10 @@ class MameToBatocera:
             else:
                 # Artwork data is minimal, only add missing fields
                 merged[rom_name].update({k: v for k, v in data.items() if v and k not in merged[rom_name]})
+
+                # Ensure hidden flag is preserved from any source
+                if data.get('hidden'):
+                    merged[rom_name]['hidden'] = True
 
         return merged
 
