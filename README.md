@@ -12,6 +12,7 @@ This tool automates the conversion of MAME metadata and media assets into the fo
 - Extracts and organizes media files (screenshots, flyers, marquees) from zipped extras
 - Generates Batocera-compatible gamelist.xml with proper field mappings
 - Merges with existing gamelist.xml, preserving screenscraper.fr metadata
+- Hides unplayable games
 - Uses relative paths for media files (so it works with remotely mounted filesystems)
 - Supports dry-run mode for testing
 - Comprehensive logging with verbose output option
@@ -150,7 +151,6 @@ Check that the existing gamelist.xml is valid XML and uses the expected structur
 - Only tested with merged ROMsets/DATs/Extras from pleasuredome
 - Only processes PNG format media files
 - Does not handle video files
-- Does not filter BIOS or mechanical games (all games are included)
 - Does not rename ROM files
 - Assumes standard MAME DAT XML structure
 - Uses relative paths only
