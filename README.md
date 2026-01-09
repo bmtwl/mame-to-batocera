@@ -6,10 +6,16 @@ A Python utility that transforms MAME DAT files and extras into a Batocera-compa
 
 This tool automates the conversion of MAME metadata and media assets into the format required by Batocera's emulation frontend. It handles zipped DAT files, extracts media from extras archives, and intelligently merges with existing gamelist.xml data to preserve screenscraper.fr metadata.
 
+## Why?
+
+I made this because scraping well-known sites was both inefficient and resulted in a very incomplete, unsatisfying experience in Batocera.
+
+Since MAME already _has_ a great Extras setup and DAT (xml) files with a lot of the required information, I made this to leverage these already existing and widely available resources to do a "good enough" job without having to scrape for days and days.
+
 ## Features
 
 - Parses MAME DAT files from zip archives (ROMs, CHDs, and artwork)
-- Extracts and organizes media files (screenshots, flyers, marquees) from zipped extras
+- Extracts and organizes media files (screenshots, flyers, marquees) from zipped extras. Files work exactly as you downloaded them.
 - Generates Batocera-compatible gamelist.xml with proper field mappings
 - Merges with existing gamelist.xml, preserving screenscraper.fr metadata
 - Hides unplayable games
